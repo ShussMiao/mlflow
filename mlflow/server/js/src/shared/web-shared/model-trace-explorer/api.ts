@@ -41,6 +41,21 @@ export const createAssessment = ({
 export const fetchTraceInfoV3 = ({ traceId }: { traceId: string }) =>
   fetchAPI(getAjaxUrl(`ajax-api/3.0/mlflow/traces/${traceId}`));
 
+/**
+ * One issue by ID. Addressed by ID alone -- no experiment needed -- so a trace can resolve the
+ * issues it references without knowing where they were filed.
+ */
+export const fetchIssue = ({ issueId }: { issueId: string }) =>
+  fetchAPI(getAjaxUrl(`ajax-api/3.0/mlflow/issues/${encodeURIComponent(issueId)}`));
+
+export type FetchIssueResponse = {
+  issue?: {
+    issue_id?: string;
+    /** `pending`, `resolved` or `rejected`; the latter two read as "Resolved" and "Not an issue". */
+    status?: string;
+  };
+};
+
 export type FetchTraceInfoV3Response = {
   trace?: {
     trace_info?: ModelTrace['info'];
